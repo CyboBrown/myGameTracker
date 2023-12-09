@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+{% if request.session.curr_user != '' %}
+
+<table class="table table-striped table-hover table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Username</th>
+            <th scope="col">Birthdate</th>
+            <th scope="col">Date Joined</th>
+            <th scope="col">Email</th>
+            <th scope="col">Bio</th>
+            <th scope="col">Gender</th>
+            </tr>
+    </thead>
+    <tbody>
+    {% if users %}
+	{% for user in users %}
+		<tr>
+			<td>{{ user.user_id }}</td>
+			<td>{{ user.username }}</td>
+			<td>{{ user.birthdate }}</td>
+			<td>{{ user.join_date }}</td>
+			<td>{{ user.email }}</td>
+			<td>{{ user.bio }}</td>
+			<td>{{ user.gender }}</td>
+		</tr>
+	{% endfor %}
+    {% endif %}
+    </tbody>
+</table>
+
+{% else %}
+
+<h1>You are not logged in.</h1>
+
+{% endif %}
+
+{% endblock %}

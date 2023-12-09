@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block title %}Signup{% endblock %}
+{% block content %}
+    <br>
+    <h1>Sign Up</h1>
+    <form method="post" action="{% url 'user:signup' %}" id="signup_form">
+        {% csrf_token %}
+        {{form.as_p}}
+        <input type="submit" class="btn btn-success" value="Sign Up">
+        {% if response %}
+        <p>User already exists</p>
+        {% endif %}
+    </form>
+{% endblock %}
