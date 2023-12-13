@@ -19,6 +19,14 @@ def dashboard(request):
     return render(request, 'dashboard.html', {'users': user})
 
 
+def profile(request):
+    return render(request, 'profile.html')
+
+
+def friends(request):
+    return render(request, 'friends.html')
+
+
 class UserSignup(View):
     template = 'signup.html'
 
@@ -55,10 +63,10 @@ class UserLogin(View):
         password = request.POST.get("password")
         error = False
         try:
-            users = User.objects.filter(username=username, password=password)
-            request.session['curr_user'] = 'username'
+            User.objects.filter(username=username, password=password)
+            request.session['curr_user'] = username
             print("Login successful")
-            return render(request, 'dashboard.html', {'users': users})
+            return render(request, 'home.html')
         except:
             error = True
             print("Login failed")

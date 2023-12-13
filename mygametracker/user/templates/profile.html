@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+
+{% if request.session.curr_user != '' %}
+
+<h1>Profile</h1>
+<div class="card bg-dark text-light border-light mt-3">
+  <div class="card-body">This page should contain all the relevant information about the user. If the current user is visiting their own profile, they should have the ability to edit certain information in their profile.</div>
+</div>
+
+{% else %}
+
+<div class="alert alert-dismissible fade show border border-light">
+  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <strong>Info!</strong> You are currently not logged in.
+</div>
+<h1>Profile</h1>
+<div class="card bg-dark text-light border-light mt-3">
+  <div class="card-body">This page should contain all the relevant information about the user. If the current user is visiting their own profile, they should have the ability to edit certain information in their profile.</div>
+</div>
+
+{% endif %}
+
+{% endblock %}

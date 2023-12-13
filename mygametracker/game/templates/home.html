@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+{% if request.session.curr_user != '' %}
+
+<h1>Welcome to MyGameTracker, {{ request.session.curr_user }}!</h1>
+
+{% else %}
+
+<div class="alert alert-dismissible fade show border border-light">
+  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+  <strong>Info!</strong> You are currently not logged in.
+</div>
+<h1>Welcome to MyGameTracker!</h1>
+
+{% endif %}
+
+{% endblock %}
