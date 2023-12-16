@@ -11,4 +11,4 @@ class Collection(models.Model):
     game_collection = models.ManyToManyField(Game)
 
     def __str__(self):
-        return self
+        return self.name

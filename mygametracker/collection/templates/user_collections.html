@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Collections{% endblock %}
+{% block content %}
+
+{% if user != '' %}
+
+<h1>Collections</h1>
+<div class="card bg-dark text-light border-light mt-3">
+    <div class="card-body p-0 pt-1">
+        <table class="table table-dark table-hover">
+            <thead class="border-bottom">
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th>Last Modified</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for collection in collections %}
+            <tr class="position-relative">
+                <td scope="row"><a class="stretched-link" href="{% url 'collection:collection_detail' collection_id=collection.collection_id user=user %}"></a></td>
+                <td>{{ collection.name }}</td>
+                <td>January 12, 2003 10:45pm</td>
+                {% if request.session.curr_user != '' %}
+                <td></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% else %}
+
+<div class="alert alert-dismissible fade show border border-light">
+    <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+    <strong>Warning!</strong> No collection selected.
+</div>
+<h1>Collections</h1>
+<div class="card bg-dark text-light border-light mt-3">
+    <div class="card-body">This page should contain the list of collections that the user have.</div>
+</div>
+
+{% endif %}
+
+{% endblock %}

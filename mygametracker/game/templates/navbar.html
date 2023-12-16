@@ -23,7 +23,7 @@
           <div class="dropdown-menu dropdown-menu-dark bg-dark border border-secondary">
             <a class="dropdown-item" href="{% url 'user:profile' %}">Profile</a>
             <a class="dropdown-item" href="{% url 'user:friends' %}">Friends</a>
-            <a class="dropdown-item" href="{% url 'collection:main' %}">Collections</a>
+            <a class="dropdown-item" href="{% url 'collection:main' user=request.session.curr_user %}">Collections</a>
             <div class="dropdown-divider bg-secondary"></div>
             <a class="dropdown-item" href="{% url 'user:logout' %}">Log Out</a>
           </div>

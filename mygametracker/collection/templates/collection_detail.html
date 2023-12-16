@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}{{ collection.name }} (Collection){% endblock %}
+{% block content %}
+
+{% if request.session.curr_user != '' %}
+
+<h1><a class="text-light" href="{% url 'collection:main' user=user %}">Collections</a> > {{ collection.name }}</h1>
+<div class="card bg-dark text-light border-light mt-3">
+    <div class="card-body p-0 pt-1">
+        <table class="table table-dark table-hover">
+            <thead class="border-bottom">
+            <tr>
+                <th></th>
+                <th>Game</th>
+                <th>Description</th>
+                <th>Release Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for game in collection.game_collection.all %}
+            <tr class="position-relative">
+                <td scope="row"><a class="stretched-link" href=""></a></td>
+                <td>{{ game.title }}</td>
+                <td>{{ game.description }}</td>
+                <td>{{ game.release_date }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+{% else %}
+
+<div class="alert alert-dismissible fade show border border-light">
+    <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+    <strong>Info!</strong> You are currently not logged in.
+</div>
+<h1>Collections</h1>
+<div class="card bg-dark text-light border-light mt-3">
+    <div class="card-body">This page should contain the list of collections that the user have.</div>
+</div>
+
+{% endif %}
+
+{% endblock %}
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ collection.name }}</title>
+</head>
+<body>
+    <h1>{{ collection.name }}</h1>
+    <h2>Games in Collection:</h2>
+    {% for game in collection.game_collection.all %}
+        <p>{{ game.title }}</p>
+    {% endfor %}
+</body>
+</html>
