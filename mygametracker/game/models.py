@@ -1,4 +1,7 @@
 from django.db import models
+from django.urls import reverse
+
+
 # from stats.models import Platform
 
 
@@ -36,6 +39,11 @@ class Game(models.Model):
     publishers = models.ManyToManyField(Publisher)
     developers = models.ManyToManyField(Developer)
     genres = models.ManyToManyField(Genre)
+    rating = models.FloatField()
+    image = models.URLField(default='https://example.com/default-image.jpg')  # Add this line for the image URL
 
     def __str__(self):
-        return self
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('game_detail', args=[str(self.game_id)])

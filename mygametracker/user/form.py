@@ -43,3 +43,5 @@ class LoginForm(ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+

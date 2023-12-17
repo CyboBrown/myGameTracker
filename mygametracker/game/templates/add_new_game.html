@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}Add New Game{% endblock %}
+{% block content %}
+
+{% load static %}
+
+<div class="container mt-4">
+
+  {% if request.session.curr_user != '' %}
+    <h1 class="mb-4">Add New Game</h1>
+
+    {% if success_message %}
+      <div class="alert alert-success" role="alert">
+        {{ success_message }}
+      </div>
+    {% endif %}
+
+    {% if error_message %}
+      <div class="alert alert-danger" role="alert">
+        {{ error_message }}
+      </div>
+    {% endif %}
+
+    <!-- Add your form here -->
+    <form method="post" action="{% url 'game:add_new_game' %}">
+      {% csrf_token %}
+
+      <!-- Title -->
+      <div class="mb-3">
+        <label for="title" class="form-label">Title:</label>
+        <input type="text" class="form-control" id="title" name="title" required>
+      </div>
+
+      <!-- Genre -->
+      <div class="mb-3">
+        <label for="genre" class="form-label">Genre:</label>
+        <input type="text" class="form-control" id="genre" name="genre" required>
+      </div>
+
+      <!-- Description -->
+      <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+      </div>
+
+      <!-- Release Date -->
+      <div class="mb-3">
+        <label for="release_date" class="form-label">Release Date:</label>
+        <input type="date" class="form-control" id="release_date" name="release_date" required>
+      </div>
+
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+  {% else %}
+    <div class="alert alert-dismissible fade show border border-light">
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      <strong>Info!</strong> You are currently not logged in.
+    </div>
+    <h1 class="mb-4">Welcome to MyGameTracker!</h1>
+  {% endif %}
+
+</div>
+
+{% endblock %}
