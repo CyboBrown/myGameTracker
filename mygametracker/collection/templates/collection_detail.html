@@ -12,19 +12,29 @@
             <tr>
                 <th></th>
                 <th>Game</th>
-                <th>Description</th>
-                <th>Release Date</th>
+                <th>Status</th>
+                <th>Score</th>
+                <th>Review</th>
             </tr>
             </thead>
             <tbody>
-            {% for game in collection.game_collection.all %}
+            {% if games.count == 0 %}
+            <tr><td class="text-center" colspan="5">No Games Found in Collection</td></tr>
+            {% else %}
+            {% for game in games %}
             <tr class="position-relative align-middle">
                 <td scope="row"><a class="stretched-link" href=""></a></td>
                 <td class="fs-5">{{ game.title }}</td>
-                <td>{{ game.description }}</td>
-                <td>{{ game.release_date }}</td>
+                {% for detail in game_details %}
+                {% if detail.game_id == game %}
+                <td>{{ detail.status }}</td>
+                <td>{{ detail.score }}</td>
+                <td>{{ detail.review }}</td>
+                {% endif %}
+                {% endfor %}
             </tr>
             {% endfor %}
+            {% endif %}
             </tbody>
         </table>
     </div>

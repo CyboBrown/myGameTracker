@@ -24,7 +24,7 @@ class UserGamePlatform(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
     platform_id = models.ForeignKey(Platform, on_delete=models.CASCADE)
-    rating_int = models.IntegerField(name="Score")
+    rating_int = models.IntegerField(name="score")
     # progress_int = models.IntegerField(name="Progress")
     status = models.CharField(max_length=3, choices=STATUS_CHOICES)
     review = models.TextField()

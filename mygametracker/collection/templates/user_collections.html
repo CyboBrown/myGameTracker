@@ -5,21 +5,23 @@
 {% if user != '' %}
 
 {% if messages %}
-    {% for message in messages %}
-    <div class="alert alert-dismissible fade show border border-light">
-        <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
-        {{ message }}
-    </div>
-    {% endfor %}
+{% for message in messages %}
+<div class="alert alert-dismissible fade show border border-light">
+    <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+    {{ message }}
+</div>
+{% endfor %}
 {% endif %}
 
 <div class="clearfix">
     <span class="float-start"><h1>Collections</h1></span>
     <span class="float-end">
+        {% if request.session.curr_user == user %}
         <button type="button" class="btn btn-primary d-flex align-middle py-2" style="z-index:3; position:relative;"
                 data-bs-toggle="modal" data-bs-target="#addModal">
             <span class="material-symbols-outlined">add</span>
         </button>
+        {% endif %}
     </span>
 </div>
 <div class="card bg-dark text-light border-light mt-3">
@@ -29,24 +31,29 @@
             <tr>
                 <th></th>
                 <th>Name</th>
+                <th>Description</th>
                 <th>Last Modified</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             {% for collection in collections %}
+            {% if collection.is_private == 0 or request.session.curr_user == user %}
             <tr class="position-relative align-middle">
                 <td scope="row">
                     <a class="stretched-link"
                        href="{% url 'collection:collection_detail' collection_id=collection.collection_id user=user %}"></a>
                 </td>
                 <td class="fs-5">{{ collection.name }}
+                    {% if request.session.curr_user == user %}
                     {% if collection.is_private == 0 %}
                     <span class="badge bg-primary">Public</span>
                     {% else %}
                     <span class="badge bg-danger">Private</span>
                     {% endif %}
+                    {% endif %}
                 </td>
+                <td>{{ collection.description }}</td>
                 <td>{{ collection.date_modified }}</td>
                 {% if request.session.curr_user == user %}
                 <td class="d-flex flex-row-reverse">
@@ -61,7 +68,7 @@
                     <!--                        <span class="material-symbols-outlined">Edit</span>-->
                     <!--                    </button>-->
 
-                    <div class="btn-group" role="group">
+                    <div class="btn-group">
                         <button type="button" class="btn btn-primary d-flex align-middle py-2"
                                 style="z-index:3; position:relative;"
                                 data-bs-toggle="modal" data-bs-target="#renameModal{{collection.collection_id}}">
@@ -72,55 +79,54 @@
                                 data-bs-toggle="modal" data-bs-target="#deleteModal{{collection.collection_id}}">
                             <span class="material-symbols-outlined">delete</span>
                         </button>
-
-                        <!-- Rename Collection Modal -->
-                        <div class="modal fade" id="renameModal{{collection.collection_id}}">
-                            <div class="modal-dialog">
-                                <div class="modal-content bg-dark">
-                                    <div class="modal-header">
-                                        <h4>Rename Collection</h4>
-                                        <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Modal body..
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close
-                                        </button>
-                                    </div>
-                                </div>
+                    </div>
+                </td>
+                <!-- Rename Collection Modal -->
+                <div class="modal fade" id="renameModal{{collection.collection_id}}">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h4>Rename Collection</h4>
+                                <button type="button" class="btn-close btn-close-white"
+                                        data-bs-dismiss="modal"></button>
                             </div>
-                        </div>
-
-                        <!-- Delete Collection Modal -->
-                        <div class="modal fade" id="deleteModal{{collection.collection_id}}">
-                            <div class="modal-dialog">
-                                <div class="modal-content bg-dark">
-                                    <div class="modal-header">
-                                        <h4>Delete Collection</h4>
-                                        <button type="button" class="btn-close btn-close-white"
-                                                data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        Are you sure that you want to delete "{{ collection.name }}"?
-                                    </div>
-                                    <div class="modal-footer">
-                                        <a href="{% url 'collection:delete' collection_id=collection.collection_id user=user %}"
-                                           class="btn btn-danger">Confirm</a>
-                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel
-                                        </button>
-                                    </div>
-                                </div>
+                            <div class="modal-body">
+                                Modal body..
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close
+                                </button>
                             </div>
                         </div>
                     </div>
-                </td>
+                </div>
+
+                <!-- Delete Collection Modal -->
+                <div class="modal fade" id="deleteModal{{collection.collection_id}}">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h4>Delete Collection</h4>
+                                <button type="button" class="btn-close btn-close-white"
+                                        data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure that you want to delete "{{ collection.name }}"?
+                            </div>
+                            <div class="modal-footer">
+                                <a href="{% url 'collection:delete' collection_id=collection.collection_id user=user %}"
+                                   class="btn btn-danger">Confirm</a>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 {% else %}
                 <td></td>
                 {% endif %}
             </tr>
-
+            {% endif %}
             {% endfor %}
 
             <!-- Add Collection Modal -->

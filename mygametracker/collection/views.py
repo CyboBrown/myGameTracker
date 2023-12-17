@@ -5,6 +5,7 @@ from django.views import View
 from .models import Collection
 from .forms import CollectionForm
 from user.models import User
+from stats.models import UserGamePlatform
 
 
 def index(request):
@@ -12,8 +13,12 @@ def index(request):
 
 
 def collection_detail(request, user, collection_id):
-    collection = get_object_or_404(Collection, pk=collection_id)
-    return render(request, 'collection_detail.html', {'collection': collection, 'user': user})
+    # collection = get_object_or_404(Collection, pk=collection_id)
+    user_id = User.objects.get(username=user).user_id
+    collection = get_object_or_404(Collection, pk=collection_id, user_id=user_id)
+    games = collection.game_collection.all()
+    game_details = UserGamePlatform.objects.filter(user_id=user_id, game_id__in=games).distinct()
+    return render(request, 'collection_detail.html', {'collection': collection, 'user': user, 'games': games, 'game_details': game_details})
 
 
 def delete_collection(request, user, collection_id):
@@ -47,10 +52,8 @@ class CreateCollection(View):
                 collection = form.save(commit=False)
                 collection.user_id = User.objects.get(username=user)
                 collection.save()
-
-                # Redirect after successful form submission
+                messages.success(request, 'Collection added successfully.')
                 return render(request, self.template, {'collections': collections, 'user': user, 'form': form})
-
-            form.add_error('name', 'A collection with this name already exists.')
-
+            messages.error(request, 'A collection with this name already exists.')
+            # form.add_error('name', 'A collection with this name already exists.')
         return render(request, self.template, {'collections': collections, 'user': user, 'form': form})
