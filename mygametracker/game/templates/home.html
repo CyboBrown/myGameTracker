@@ -2,18 +2,209 @@
 {% block title %}Dashboard{% endblock %}
 {% block content %}
 
-{% if request.session.curr_user != '' %}
+{% load static %}  <!-- Add this line -->
 
-<h1>Welcome to MyGameTracker, {{ request.session.curr_user }}!</h1>
+<div class="container mt-4">
 
-{% else %}
+  {% if request.session.curr_user != '' %}
 
-<div class="alert alert-dismissible fade show border border-light">
-  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  <strong>Info!</strong> You are currently not logged in.
+    <h1 class="mb-4">Welcome to MyGameTracker, {{ request.session.curr_user }}!</h1>
+  <br>
+  <br>
+
+    <!-- First Card Set - Set1 -->
+    <h2 class="mb-3">Set1</h2>
+
+    <div id="gameCarousel1" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+
+        <!-- Card 1 -->
+        <div class="carousel-item active">
+          <img src="{% static 'path/to/popular1.jpg' %}" class="d-block w-100" alt="Popular Game 1">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Popular Game Title 1</h5>
+            <p>Some description about Popular Game 1.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="carousel-item">
+          <img src="{% static 'path/to/popular2.jpg' %}" class="d-block w-100" alt="Popular Game 2">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Popular Game Title 2</h5>
+            <p>Some description about Popular Game 2.</p>
+          </div>
+        </div>
+
+        <!-- Add more cards up to Card 10 -->
+
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#gameCarousel1" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#gameCarousel1" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+    <!-- Second Card Set - Set2 -->
+    <h2 class="mb-3 mt-5">Set2</h2>
+
+    <div id="gameCarousel2" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+
+        <!-- Card 1 -->
+        <div class="carousel-item active">
+          <img src="{% static 'path/to/another_popular1.jpg' %}" class="d-block w-100" alt="Another Popular Game 1">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Another Popular Game Title 1</h5>
+            <p>Some description about Another Popular Game 1.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="carousel-item">
+          <img src="{% static 'path/to/another_popular2.jpg' %}" class="d-block w-100" alt="Another Popular Game 2">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Another Popular Game Title 2</h5>
+            <p>Some description about Another Popular Game 2.</p>
+          </div>
+        </div>
+
+        <!-- Add more cards up to Card 10 -->
+
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#gameCarousel2" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#gameCarousel2" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+    <!-- Third Card Set - Set3 -->
+    <h2 class="mb-3 mt-5">Set3</h2>
+   <div id="gameCarousel3" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+
+        <!-- Card 1 -->
+        <div class="carousel-item active">
+          <img src="{% static 'path/to/another_popular1.jpg' %}" class="d-block w-100" alt="Another Popular Game 1">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Another Popular Game Title 1</h5>
+            <p>Some description about Another Popular Game 1.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="carousel-item">
+          <img src="{% static 'path/to/another_popular2.jpg' %}" class="d-block w-100" alt="Another Popular Game 2">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Another Popular Game Title 2</h5>
+            <p>Some description about Another Popular Game 2.</p>
+          </div>
+        </div>
+
+        <!-- Add more cards up to Card 10 -->
+
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#gameCarousel2" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#gameCarousel2" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+    <!-- Fourth Card Set - Set4 -->
+    <h2 class="mb-3 mt-5">Set4</h2>
+   <div id="gameCarousel4" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+
+        <!-- Card 1 -->
+        <div class="carousel-item active">
+          <img src="{% static 'path/to/another_popular1.jpg' %}" class="d-block w-100" alt="Another Popular Game 1">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Another Popular Game Title 1</h5>
+            <p>Some description about Another Popular Game 1.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="carousel-item">
+          <img src="{% static 'path/to/another_popular2.jpg' %}" class="d-block w-100" alt="Another Popular Game 2">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Another Popular Game Title 2</h5>
+            <p>Some description about Another Popular Game 2.</p>
+          </div>
+        </div>
+
+        <!-- Add more cards up to Card 10 -->
+
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#gameCarousel2" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#gameCarousel2" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+
+    <!-- Fifth Card Set - Set5 -->
+    <h2 class="mb-3 mt-5">Set5</h2>
+ <div id="gameCarousel5" class="carousel slide" data-bs-ride="carousel">
+      <div class="carousel-inner">
+
+        <!-- Card 1 -->
+        <div class="carousel-item active">
+          <img src="{% static 'path/to/another_popular1.jpg' %}" class="d-block w-100" alt="Another Popular Game 1">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Another Popular Game Title 1</h5>
+            <p>Some description about Another Popular Game 1.</p>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="carousel-item">
+          <img src="{% static 'path/to/another_popular2.jpg' %}" class="d-block w-100" alt="Another Popular Game 2">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Another Popular Game Title 2</h5>
+            <p>Some description about Another Popular Game 2.</p>
+          </div>
+        </div>
+
+        <!-- Add more cards up to Card 10 -->
+
+      </div>
+      <button class="carousel-control-prev" type="button" data-bs-target="#gameCarousel2" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+      </button>
+      <button class="carousel-control-next" type="button" data-bs-target="#gameCarousel2" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+      </button>
+    </div>
+
+  {% else %}
+
+    <div class="alert alert-dismissible fade show border border-light">
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      <strong>Info!</strong> You are currently not logged in.
+    </div>
+    <h1 class="mb-4">Welcome to MyGameTracker!</h1>
+
+  {% endif %}
+
 </div>
-<h1>Welcome to MyGameTracker!</h1>
-
-{% endif %}
 
 {% endblock %}
