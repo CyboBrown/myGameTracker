@@ -5,9 +5,9 @@
 {% if request.session.curr_user != '' %}
 
 <h1><a class="text-light" href="{% url 'collection:main' user=user %}">Collections</a> > {{ collection.name }}</h1>
-<div class="card bg-dark text-light border-light mt-3">
-    <div class="card-body p-0 pt-1">
-        <table class="table table-dark table-hover">
+<div class="card bg-dark text-light border-light mt-4">
+    <div class="card-body p-0">
+        <table class="table table-dark table-hover table-borderless table-responsive my-1">
             <thead class="border-bottom">
             <tr>
                 <th></th>
@@ -18,9 +18,9 @@
             </thead>
             <tbody>
             {% for game in collection.game_collection.all %}
-            <tr class="position-relative">
+            <tr class="position-relative align-middle">
                 <td scope="row"><a class="stretched-link" href=""></a></td>
-                <td>{{ game.title }}</td>
+                <td class="fs-5">{{ game.title }}</td>
                 <td>{{ game.description }}</td>
                 <td>{{ game.release_date }}</td>
             </tr>

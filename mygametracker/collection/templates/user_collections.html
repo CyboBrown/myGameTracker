@@ -4,10 +4,27 @@
 
 {% if user != '' %}
 
-<h1>Collections</h1>
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible fade show border border-light">
+        <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+        {{ message }}
+    </div>
+    {% endfor %}
+{% endif %}
+
+<div class="clearfix">
+    <span class="float-start"><h1>Collections</h1></span>
+    <span class="float-end">
+        <button type="button" class="btn btn-primary d-flex align-middle py-2" style="z-index:3; position:relative;"
+                data-bs-toggle="modal" data-bs-target="#addModal">
+            <span class="material-symbols-outlined">add</span>
+        </button>
+    </span>
+</div>
 <div class="card bg-dark text-light border-light mt-3">
-    <div class="card-body p-0 pt-1">
-        <table class="table table-dark table-hover">
+    <div class="card-body p-0">
+        <table class="table table-dark table-hover table-borderless table-responsive my-1">
             <thead class="border-bottom">
             <tr>
                 <th></th>
@@ -18,20 +35,129 @@
             </thead>
             <tbody>
             {% for collection in collections %}
-            <tr class="position-relative">
-                <td scope="row"><a class="stretched-link" href="{% url 'collection:collection_detail' collection_id=collection.collection_id user=user %}"></a></td>
-                <td>{{ collection.name }}</td>
-                <td>January 12, 2003 10:45pm</td>
-                {% if request.session.curr_user != '' %}
+            <tr class="position-relative align-middle">
+                <td scope="row">
+                    <a class="stretched-link"
+                       href="{% url 'collection:collection_detail' collection_id=collection.collection_id user=user %}"></a>
+                </td>
+                <td class="fs-5">{{ collection.name }}
+                    {% if collection.is_private == 0 %}
+                    <span class="badge bg-primary">Public</span>
+                    {% else %}
+                    <span class="badge bg-danger">Private</span>
+                    {% endif %}
+                </td>
+                <td>{{ collection.date_modified }}</td>
+                {% if request.session.curr_user == user %}
+                <td class="d-flex flex-row-reverse">
+                    <!--                    <button type="button" class="btn btn-outline-primary d-flex align-middle py-2 mx-1"-->
+                    <!--                            style="z-index:3; position:relative;"-->
+                    <!--                            data-bs-toggle="modal" data-bs-target="#deleteModal">-->
+                    <!--                        <span class="material-symbols-outlined">Delete</span>-->
+                    <!--                    </button>-->
+                    <!--                    <button type="button" class="btn btn-primary d-flex align-middle py-2 mx-1"-->
+                    <!--                            style="z-index:3; position:relative;"-->
+                    <!--                            data-bs-toggle="modal" data-bs-target="#renameModal">-->
+                    <!--                        <span class="material-symbols-outlined">Edit</span>-->
+                    <!--                    </button>-->
+
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary d-flex align-middle py-2"
+                                style="z-index:3; position:relative;"
+                                data-bs-toggle="modal" data-bs-target="#renameModal{{collection.collection_id}}">
+                            <span class="material-symbols-outlined">edit</span>
+                        </button>
+                        <button type="button" class="btn btn-danger d-flex align-middle py-2"
+                                style="z-index:3; position:relative;"
+                                data-bs-toggle="modal" data-bs-target="#deleteModal{{collection.collection_id}}">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+
+                        <!-- Rename Collection Modal -->
+                        <div class="modal fade" id="renameModal{{collection.collection_id}}">
+                            <div class="modal-dialog">
+                                <div class="modal-content bg-dark">
+                                    <div class="modal-header">
+                                        <h4>Rename Collection</h4>
+                                        <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Modal body..
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Delete Collection Modal -->
+                        <div class="modal fade" id="deleteModal{{collection.collection_id}}">
+                            <div class="modal-dialog">
+                                <div class="modal-content bg-dark">
+                                    <div class="modal-header">
+                                        <h4>Delete Collection</h4>
+                                        <button type="button" class="btn-close btn-close-white"
+                                                data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Are you sure that you want to delete "{{ collection.name }}"?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <a href="{% url 'collection:delete' collection_id=collection.collection_id user=user %}"
+                                           class="btn btn-danger">Confirm</a>
+                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                {% else %}
                 <td></td>
                 {% endif %}
             </tr>
+
             {% endfor %}
+
+            <!-- Add Collection Modal -->
+            <form method="post" action="{% url 'collection:main' user=user %}">
+                {% csrf_token %}
+                <div class="modal fade" id="addModal">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h4>Create New Collection</h4>
+                                <button type="button" class="btn-close btn-close-white"
+                                        data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                {{ form.as_p }}
+                                <!--                            <div class="my-3">-->
+                                <!--                                <label for="txtCollectionName" class="form-label">Name</label>-->
+                                <!--                                <input type="text" id="txtCollectionName" name="txtCollectionName" class="form-control" required>-->
+                                <!--                                <div class="invalid-feedback">Please fill out this field.</div>-->
+                                <!--                            </div>-->
+                                <!--                            <div class="form-check my-3">-->
+                                <!--                                <input type="checkbox" id="cbPrivate" name="cbPrivate" class="form-check-input">-->
+                                <!--                                <label for="cbPrivate" class="form-check-label">Set as Private</label>-->
+                                <!--                            </div>-->
+                            </div>
+                            <div class="modal-footer">
+                                <input type="submit" class="btn btn-primary" name="btnRegister" value="Submit">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
             </tbody>
         </table>
     </div>
 </div>
-
 
 {% else %}
 
