@@ -12,38 +12,6 @@
     </div>
     {% endfor %}
 {% endif %}
-
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-
-    h1 {
-      text-align: center;
-    }
-
-    .content-rectangle {
-      background-color: white;
-      min-height: calc(100vh - 56px);
-      display: none;
-    }
-
-    .active-content {
-      display: block;
-    }
-
-    .published-box {
-      margin-top: 10px;
-      text-align: justify;
-    }
-
-    .delete-btn {
-      margin-left: auto;
-      cursor: pointer;
-    }
-  </style>
-</head>
 <body>
     <script>
         const greetings = [
@@ -67,7 +35,7 @@
 
         const randomIndex = Math.floor(Math.random() * greetings.length);
 
-        document.write(`<h1>${greetings[randomIndex]}{{ request.session.curr_user }}?   </h1>`);
+        document.write(`<h1 style="text-align: center">${greetings[randomIndex]}{{ request.session.curr_user }}?   </h1>`);
     </script>
 
   <br>
@@ -104,7 +72,10 @@
             </div>
         </form>
         <br>
-        <button type="button" class="btn btn-primary mt-2 d-block mx-auto" data-bs-toggle="modal" data-bs-target="#editProfile">Edit Profile</button>
+        <div style="display: flex; justify-content: center;">
+            <button type="button" class="btn btn-primary mt-2 mx-2" data-bs-toggle="modal" data-bs-target="#editProfile">Edit Profile</button>
+            <button type="button" class="btn btn-danger mt-2 mx-2" data-bs-toggle="modal" data-bs-target="#deleteProfile">Delete Profile</button>
+        </div>
     </div>
 </div>
 
@@ -123,6 +94,7 @@
         }
     </script>
 
+            <!-- Edit Profile Modal -->
             <form method="post" action="{% url 'user:profile' %}">
                 {% csrf_token %}
                 <div class="modal fade" id="editProfile">
@@ -135,18 +107,28 @@
                             </div>
                             <div class="modal-body">
                                     {{ form.as_p }}
-<!--                                <br>-->
-<!--                                <input type="text" name="newUsername" class="form-control" placeholder="New Username here..." required="" id="newUsername">-->
-<!--                                <br>-->
-<!--                                <input type="email" name="newEmail" class="form-control" placeholder="your_email@email.com..." required="" id="newEmail">-->
-<!--                                <br>-->
-<!--                                <input type="text" name="newBio" class="form-control" placeholder="Hello, I am..." required="" id="newBio">-->
-<!--                                <br>-->
-<!--                                <input type="text" name="newGender" class="form-control" placeholder="M or F" required="" id="newGender">-->
-<!--                                <br>-->
                             </div>
                             <div class="modal-footer">
                                 <input type="submit" class="btn btn-primary" name="btnRegister" value="Submit">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <form method="post" action="{% url 'user:delete_profile' %}">
+                {% csrf_token %}
+                <div class="modal fade" id="deleteProfile">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h4>Are you sure you want to delete </h4>
+                                <button type="button" class="btn-close btn-close-white"
+                                        data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="submit" class="btn btn-success" name="btnRegister" value="Submit">
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </div>

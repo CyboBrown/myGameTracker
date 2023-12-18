@@ -77,6 +77,25 @@ def profile(request):
     else:
         return HttpResponse("User not authenticated")
 
+def delete_profile(request):
+    if request.method == 'POST':
+        current_username = request.session.get('curr_user')
+
+        if current_username:
+            try:
+                user = User.objects.get(username=current_username)
+                user.delete()
+
+                request.session.clear()
+
+                return redirect('user:logout')
+            except User.DoesNotExist:
+                return HttpResponse("User does not exist")
+        else:
+            pass
+    else:
+        pass
+
 
 def friends(request):
     return render(request, 'friends.html')
