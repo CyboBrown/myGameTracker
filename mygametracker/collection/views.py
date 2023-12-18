@@ -34,6 +34,23 @@ def delete_collection(request, user, collection_id):
     return render(request, 'user_collections.html', {'collections': collections, 'user': user, 'form': form})
 
 
+def update_collection(request, user, collection_id):
+    user_id = User.objects.get(username=user).user_id
+    collections = Collection.objects.filter(user_id=user_id)
+    form = CollectionForm()
+    collection = get_object_or_404(Collection, pk=collection_id, user_id=user_id)
+    if request.method == 'POST':
+        collection.name = request.POST.get('txtCollectionName')
+        collection.description = request.POST.get('txtDescription')
+        if request.POST.get('cbPrivate') == 'on':
+            collection.is_private = 1
+        else:
+            collection.is_private = 0
+        collection.save()
+        messages.success(request, 'Collection updated successfully.')
+    return render(request, 'user_collections.html', {'collections': collections, 'user': user, 'form': form})
+
+
 class CreateCollection(View):
     template = 'user_collections.html'
 
@@ -55,5 +72,4 @@ class CreateCollection(View):
                 messages.success(request, 'Collection added successfully.')
                 return render(request, self.template, {'collections': collections, 'user': user, 'form': form})
             messages.error(request, 'A collection with this name already exists.')
-            # form.add_error('name', 'A collection with this name already exists.')
         return render(request, self.template, {'collections': collections, 'user': user, 'form': form})

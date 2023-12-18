@@ -57,21 +57,10 @@
                 <td>{{ collection.date_modified }}</td>
                 {% if request.session.curr_user == user %}
                 <td class="d-flex flex-row-reverse">
-                    <!--                    <button type="button" class="btn btn-outline-primary d-flex align-middle py-2 mx-1"-->
-                    <!--                            style="z-index:3; position:relative;"-->
-                    <!--                            data-bs-toggle="modal" data-bs-target="#deleteModal">-->
-                    <!--                        <span class="material-symbols-outlined">Delete</span>-->
-                    <!--                    </button>-->
-                    <!--                    <button type="button" class="btn btn-primary d-flex align-middle py-2 mx-1"-->
-                    <!--                            style="z-index:3; position:relative;"-->
-                    <!--                            data-bs-toggle="modal" data-bs-target="#renameModal">-->
-                    <!--                        <span class="material-symbols-outlined">Edit</span>-->
-                    <!--                    </button>-->
-
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary d-flex align-middle py-2"
                                 style="z-index:3; position:relative;"
-                                data-bs-toggle="modal" data-bs-target="#renameModal{{collection.collection_id}}">
+                                data-bs-toggle="modal" data-bs-target="#editModal{{collection.collection_id}}">
                             <span class="material-symbols-outlined">edit</span>
                         </button>
                         <button type="button" class="btn btn-danger d-flex align-middle py-2"
@@ -81,25 +70,44 @@
                         </button>
                     </div>
                 </td>
-                <!-- Rename Collection Modal -->
-                <div class="modal fade" id="renameModal{{collection.collection_id}}">
-                    <div class="modal-dialog">
-                        <div class="modal-content bg-dark">
-                            <div class="modal-header">
-                                <h4>Rename Collection</h4>
-                                <button type="button" class="btn-close btn-close-white"
-                                        data-bs-dismiss="modal"></button>
-                            </div>
-                            <div class="modal-body">
-                                Modal body..
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close
-                                </button>
+                <!-- Edit Collection Modal -->
+                <form method="post"
+                      action="{% url 'collection:edit' collection_id=collection.collection_id user=user %}">
+                    {% csrf_token %}
+                    <div class="modal fade" id="editModal{{collection.collection_id}}">
+                        <div class="modal-dialog">
+                            <div class="modal-content bg-dark">
+                                <div class="modal-header">
+                                    <h4>Edit Collection</h4>
+                                    <button type="button" class="btn-close btn-close-white"
+                                            data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="my-3">
+                                        <input type="text" id="txtCollectionName" name="txtCollectionName"
+                                               class="form-control" placeholder="Collection Name"
+                                               value="{{ collection.name }}" required>
+                                        <div class="invalid-feedback">Please fill out this field.</div>
+                                    </div>
+                                    <div>
+                                    <textarea name="txtDescription" cols="40" rows="3" class="form-control mt-2"
+                                              placeholder="Description" required="" id="txtDescription">{{ collection.description }}</textarea>
+                                    </div>
+                                    <div class="form-check my-3">
+                                        <input type="checkbox" id="cbPrivate" name="cbPrivate" class="form-check-input"
+                                               {% if collection.is_private %}checked{% endif %}>
+                                        <label for="cbPrivate" class="form-check-label">Set as Private</label>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <input type="submit" class="btn btn-primary" name="btnRegister" value="Confirm">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                </form>
 
                 <!-- Delete Collection Modal -->
                 <div class="modal fade" id="deleteModal{{collection.collection_id}}">
@@ -142,15 +150,6 @@
                             </div>
                             <div class="modal-body">
                                 {{ form.as_p }}
-                                <!--                            <div class="my-3">-->
-                                <!--                                <label for="txtCollectionName" class="form-label">Name</label>-->
-                                <!--                                <input type="text" id="txtCollectionName" name="txtCollectionName" class="form-control" required>-->
-                                <!--                                <div class="invalid-feedback">Please fill out this field.</div>-->
-                                <!--                            </div>-->
-                                <!--                            <div class="form-check my-3">-->
-                                <!--                                <input type="checkbox" id="cbPrivate" name="cbPrivate" class="form-check-input">-->
-                                <!--                                <label for="cbPrivate" class="form-check-label">Set as Private</label>-->
-                                <!--                            </div>-->
                             </div>
                             <div class="modal-footer">
                                 <input type="submit" class="btn btn-primary" name="btnRegister" value="Submit">
