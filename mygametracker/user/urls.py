@@ -8,5 +8,5 @@ urlpatterns = [
     path('logout/', views.logout, name='logout'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('profile/', views.profile, name='profile'),
-    path('friends/', views.friends, name='friends'),
+    path('<str:user>/friends/', views.AddFriend.as_view(), name='friends'),
 ]

@@ -4,10 +4,162 @@
 
 {% if request.session.curr_user != '' %}
 
-<h1>Profile</h1>
-<div class="card bg-dark text-light border-light mt-3">
-  <div class="card-body">This page should contain all the relevant information about the user. If the current user is visiting their own profile, they should have the ability to edit certain information in their profile.</div>
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-dismissible fade show border border-light">
+        <button class="btn-close" data-bs-dismiss="alert" type="button"></button>
+        {{ message }}
+    </div>
+    {% endfor %}
+{% endif %}
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .content-rectangle {
+      background-color: white;
+      min-height: calc(100vh - 56px);
+      display: none;
+    }
+
+    .active-content {
+      display: block;
+    }
+
+    .published-box {
+      margin-top: 10px;
+      text-align: justify;
+    }
+
+    .delete-btn {
+      margin-left: auto;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+    <script>
+        const greetings = [
+            "Taking a look at yourself, ",
+            "Reflecting upon yourself, ",
+            "Examining your own profile, ",
+            "Introspecting into your details, ",
+            "Observing your information, ",
+            "Exploring your profile, ",
+            "Delving into your details, ",
+            "Peering into your profile, ",
+            "Taking a closer look at you, ",
+            "Reviewing your information, ",
+            "Analyzing your profile, ",
+            "Inspecting your details, ",
+            "Exploring who you are, ",
+            "Considering your profile, ",
+            "Scrutinizing your information, ",
+            "Observing your data, ",
+        ];
+
+        const randomIndex = Math.floor(Math.random() * greetings.length);
+
+        document.write(`<h1>${greetings[randomIndex]}{{ request.session.curr_user }}?   </h1>`);
+    </script>
+
+  <br>
+
+<div id="profile" class="card bg-dark text-light border-light">
+    <div class="container mt-4 pb-5">
+        <form id="profileForm">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" readonly value="{{ user.username }}">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" aria-describedby="passwordToggle" readonly value="{{ user.password }}">
+                    <button class="btn btn-outline-secondary" type="button" id="passwordToggle" onclick="togglePasswordVisibility()">Show</button>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" readonly value="{{ user.email }}">
+            </div>
+            <div class="mb-3">
+                <label for="bio" class="form-label">Bio</label>
+                <textarea class="form-control" id="bio" readonly>{{ user.bio }}</textarea>
+            </div>
+            <div class="mb-3">
+                <label for="gender" class="form-label">Gender</label>
+                <input type="text" class="form-control" id="gender" readonly value="{{ user.get_gender_display }}">
+            </div>
+            <div class="mb-3">
+                <label for="joindate" class="form-label">Join Date</label>
+                <input type="text" class="form-control" id="joindate" readonly value="{{ user.join_date|date:'F d, Y P' }}">
+            </div>
+        </form>
+        <br>
+        <button type="button" class="btn btn-primary mt-2 d-block mx-auto" data-bs-toggle="modal" data-bs-target="#editProfile">Edit Profile</button>
+    </div>
 </div>
+
+    <script>
+        function togglePasswordVisibility() {
+            var passwordField = document.getElementById("password");
+            var passwordToggle = document.getElementById("passwordToggle");
+
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                passwordToggle.textContent = "Hide";
+            } else {
+                passwordField.type = "password";
+                passwordToggle.textContent = "Show";
+            }
+        }
+    </script>
+
+            <form method="post" action="{% url 'user:profile' %}">
+                {% csrf_token %}
+                <div class="modal fade" id="editProfile">
+                    <div class="modal-dialog">
+                        <div class="modal-content bg-dark">
+                            <div class="modal-header">
+                                <h4>Add New Friend</h4>
+                                <button type="button" class="btn-close btn-close-white"
+                                        data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                    {{ form.as_p }}
+<!--                                <br>-->
+<!--                                <input type="text" name="newUsername" class="form-control" placeholder="New Username here..." required="" id="newUsername">-->
+<!--                                <br>-->
+<!--                                <input type="email" name="newEmail" class="form-control" placeholder="your_email@email.com..." required="" id="newEmail">-->
+<!--                                <br>-->
+<!--                                <input type="text" name="newBio" class="form-control" placeholder="Hello, I am..." required="" id="newBio">-->
+<!--                                <br>-->
+<!--                                <input type="text" name="newGender" class="form-control" placeholder="M or F" required="" id="newGender">-->
+<!--                                <br>-->
+                            </div>
+                            <div class="modal-footer">
+                                <input type="submit" class="btn btn-primary" name="btnRegister" value="Submit">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+</body>
+
+<!--<h1>User's Profile</h1>-->
+<!--<div class="card bg-dark text-light border-light mt-3">-->
+<!--  <div class="card-body">This page should contain all the relevant information about the user. If the current user is visiting their own profile, they should have the ability to edit certain information in their profile.</div>-->
+<!--</div>-->
 
 {% else %}
 

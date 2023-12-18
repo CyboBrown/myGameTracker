@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 from django import forms
-from .models import User
+from .models import User, UserFriend
 
 
 class SignupForm(ModelForm):
@@ -43,3 +43,45 @@ class LoginForm(ModelForm):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+
+class AddFriendForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.label_suffix = ""
+
+    friend = forms.IntegerField(label='', widget=forms.TextInput({
+        'class': 'form-control',
+        'placeholder': "Friend's ID"
+    }))
+
+    class Meta:
+        model = UserFriend
+        fields = ['friend']
+
+class UserProfileUpdateForm(forms.Form):
+    new_username = forms.CharField(widget=forms.TextInput({
+        'class': 'form-control',
+        'placeholder': 'GayExpert420'
+    }))
+    new_password = forms.CharField(widget=forms.PasswordInput({
+        'class': 'form-control',
+        'placeholder': 'iLoveDeques69'
+    }))
+    new_email = forms.EmailField(widget=forms.TextInput({
+        'class': 'form-control',
+        'placeholder': 'your_new_email@email.com...'
+    }))
+    new_bio = forms.CharField(widget=forms.Textarea({
+        'class': 'form-control',
+        'placeholder': 'Hello, I am...'
+    }))
+    new_gender = forms.ChoiceField(choices=[("M", "Male"), ("F", "Female")], widget=forms.Select(attrs={
+        'class': 'form-control',
+    }))
+
+
+# class UserForm(forms.ModelForm):
+#     class Meta:
+#         model = User
+#         fields = '__all__'
