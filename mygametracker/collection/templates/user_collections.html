@@ -46,16 +46,21 @@
                 </td>
                 <td class="fs-5">{{ collection.name }}
                     {% if request.session.curr_user == user %}
+                    {% if collection.type == 0 %}
                     {% if collection.is_private == 0 %}
                     <span class="badge bg-primary">Public</span>
                     {% else %}
                     <span class="badge bg-danger">Private</span>
                     {% endif %}
+                    {% else %}
+                    <span class="badge bg-secondary">Auto</span>
+                    {% endif %}
                     {% endif %}
                 </td>
-                <td>{{ collection.description }}</td>
+                <td>{% if collection.type == 0 %}{{ collection.description }}{% else %}<i class="text-secondary">Generated based on user-provided game status.</i>{% endif %}
+                </td>
                 <td>{{ collection.date_modified }}</td>
-                {% if request.session.curr_user == user %}
+                {% if request.session.curr_user == user and collection.type == 0 %}
                 <td class="d-flex flex-row-reverse">
                     <div class="btn-group">
                         <button type="button" class="btn btn-primary d-flex align-middle py-2"

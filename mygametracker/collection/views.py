@@ -13,7 +13,6 @@ def index(request):
 
 
 def collection_detail(request, user, collection_id):
-    # collection = get_object_or_404(Collection, pk=collection_id)
     user_id = User.objects.get(username=user).user_id
     collection = get_object_or_404(Collection, pk=collection_id, user_id=user_id)
     games = collection.game_collection.all()
@@ -51,11 +50,20 @@ def update_collection(request, user, collection_id):
     return render(request, 'user_collections.html', {'collections': collections, 'user': user, 'form': form})
 
 
+def execute_stored_procedure(user_id):
+    with connection.cursor() as cursor:
+        cursor.callproc('GenerateCompletedGamesCollection', [user_id])
+        cursor.callproc('GeneratePlayedGamesCollection', [user_id])
+        cursor.callproc('GenerateOwnedGamesCollection', [user_id])
+        connection.commit()
+
+
 class CreateCollection(View):
     template = 'user_collections.html'
 
     def get(self, request, user):
         user_id = User.objects.get(username=user).user_id
+        execute_stored_procedure(user_id)
         collections = Collection.objects.filter(user_id=user_id)
         form = CollectionForm()
         return render(request, 'user_collections.html', {'collections': collections, 'user': user, 'form': form})
