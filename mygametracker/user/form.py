@@ -45,20 +45,6 @@ class LoginForm(ModelForm):
         fields = ['username', 'password']
 
 
-class AddFriendForm(ModelForm):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.label_suffix = ""
-
-    friend = forms.IntegerField(label='', widget=forms.TextInput({
-        'class': 'form-control',
-        'placeholder': "Friend's ID"
-    }))
-
-    class Meta:
-        model = UserFriend
-        fields = ['friend']
-
 class UserProfileUpdateForm(forms.Form):
     new_username = forms.CharField(widget=forms.TextInput({
         'class': 'form-control',
@@ -79,9 +65,3 @@ class UserProfileUpdateForm(forms.Form):
     new_gender = forms.ChoiceField(choices=[("M", "Male"), ("F", "Female")], widget=forms.Select(attrs={
         'class': 'form-control',
     }))
-
-
-# class UserForm(forms.ModelForm):
-#     class Meta:
-#         model = User
-#         fields = '__all__'

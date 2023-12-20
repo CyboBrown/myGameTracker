@@ -28,8 +28,10 @@ class User(models.Model):
 
 class UserFriend(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_friends')
-    friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend_of')
+    friend = models.ForeignKey(User, on_delete=models.CASCADE)
+    friend_username = models.CharField(max_length=255)
     date_added = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self
+        return str(self.friend_username)
+

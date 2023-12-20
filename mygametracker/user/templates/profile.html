@@ -38,10 +38,11 @@
         document.write(`<h1 style="text-align: center">${greetings[randomIndex]}{{ request.session.curr_user }}?   </h1>`);
     </script>
 
-  <br>
+    <br>
 
 <div id="profile" class="card bg-dark text-light border-light">
     <div class="container mt-4 pb-5">
+        <br>
         <form id="profileForm">
             <div class="mb-3">
                 <label for="username" class="form-label">Username</label>
@@ -109,7 +110,7 @@
                                     {{ form.as_p }}
                             </div>
                             <div class="modal-footer">
-                                <input type="submit" class="btn btn-primary" name="btnRegister" value="Submit">
+                                <input type="submit" class="btn btn-primary" name="btnSubmit" value="Submit">
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </div>
@@ -117,6 +118,7 @@
                 </div>
             </form>
 
+            <!-- Delete Profile modal -->
             <form method="post" action="{% url 'user:delete_profile' %}">
                 {% csrf_token %}
                 <div class="modal fade" id="deleteProfile">
@@ -128,7 +130,7 @@
                                         data-bs-dismiss="modal"></button>
                             </div>
                             <div class="modal-footer">
-                                <input type="submit" class="btn btn-success" name="btnRegister" value="Submit">
+                                <input type="submit" class="btn btn-success" name="btnConfirm" value="Confirm">
                                 <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
                             </div>
                         </div>
