@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Create Forum{% endblock %}
+{% block content %}
+<form method="post" action="{% url 'forum:create_forum' %}">
+    {% csrf_token %}
+    {{ form.title.errors }}
+    {{ form.title.label_tag }} {{ form.title }}<br><br>
+
+    {{ form.description.errors }}
+    {{ form.description.label_tag }}<br>{{ form.description }}<br>
+    <button type="submit" class="btn btn-secondary">Create Forum</button>
+    <a href="{% url 'forum:main' %}" class="btn btn-primary">Cancel</a>
+</form>
+
+{% endblock %}

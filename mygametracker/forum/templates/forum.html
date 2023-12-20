@@ -1,25 +1,84 @@
 {% extends 'base.html' %}
+{% load custom_filters %}
 {% block title %}Forum{% endblock %}
 {% block content %}
 
-{% if request.session.curr_user != '' %}
-
 <h1>Forum</h1>
-<div class="card bg-dark text-light border-light mt-3">
-  <div class="card-body">This page should contain the list of forum topics. There should be a way to search and sort these forum posts as well as display them fully when clicked.</div>
-</div>
 
-{% else %}
-
-<div class="alert alert-dismissible fade show border border-light">
-  <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-  <strong>Info!</strong> You are currently not logged in.
-</div>
-<h1>Forum</h1>
-<div class="card bg-dark text-light border-light mt-3">
-  <div class="card-body">This page should contain the list of forum topics. There should be a way to search and sort these forum posts as well as display them fully when clicked.</div>
-</div>
-
+{% if request.session.curr_user == '' %}
+      <div class="alert alert-dismissible fade show border border-light">
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        <strong>Info!</strong> You are currently not logged in.
+      </div>
 {% endif %}
+
+
+<div class="d-flex justify-content-between mt-3">
+    <div>
+        <form method="get" action="{% url 'forum:main' %}">
+            <select id="sort-by" name="sort_by" class="form-select" onchange="this.form.submit()">
+                <option value="" selected disabled>Sort by</option>
+                <optgroup label="Date Created">
+                    <option value="date_created" {% if sort_by == 'date_created' %}selected{% endif %}>Latest</option>
+                    <option value="oldest_date_created" {% if sort_by == 'oldest_date_created' %}selected{% endif %}>Oldest</option>
+                </optgroup>
+                <optgroup label="Top Posts">
+                    <option value="top_day" {% if sort_by == 'top_day' %}selected{% endif %}>Day</option>
+                    <option value="top_month" {% if sort_by == 'top_month' %}selected{% endif %}>Month</option>
+                    <option value="top_year" {% if sort_by == 'top_year' %}selected{% endif %}>Year</option>
+                </optgroup>
+                <optgroup label="Number of Posts">
+                    <option value="num_posts" {% if sort_by == 'num_posts' %}selected{% endif %}>Number of Posts</option>
+                </optgroup>
+            </select>
+            <input type="hidden" name="q" value="{% if search_query %}{{ search_query }}{% endif %}">
+        </form>
+    </div>
+
+    <div class="flex-grow-1 mx-2">
+        <form method="get" action="{% url 'forum:main' %}">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search forum creator, title, or description" name="q" value="{% if search_query %}{{ search_query }}{% endif %}">
+                <button class="btn btn-secondary" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <div>
+        {% if request.session.curr_user != '' %}
+            <a href="{% url 'forum:create_forum' %}" class="btn btn-success">Create New Forum</a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card bg-dark text-light border-light mt-3">
+  <div class="card-body">
+    {% if forums %}
+      <ul class="list-group forum-list">
+        {% for forum in forums %}
+            <a href="{% url 'forum:forum_details' forum_id=forum.pk %}" class="text-decoration-none text-light">
+                <li class="list-group-item {% if forloop.last %}border-bottom-0{% endif %} border-top-0 border-start-0 border-end-0 bg-dark text-light">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <h4 class="mb-0">
+                          {{ forum.title }}
+                        </h4>
+                        <p class="mb-1 small text-secondary">
+                            Created by {{ forum.user.username }}
+                            <span data-toggle="tooltip" title="{{ forum.created_on|date:'D, F d, Y, h:i A' }}">
+                                {{ forum.created_on|simplify_timesince }} ago
+                            </span>
+                            • <span class="text-light">Posts: {{ forum.post_count }}</span>
+                        </p>
+                  </div>
+                  <p class="mb-1">{{ forum.description }}</p>
+                </li>
+            {% endfor %}
+          </a>
+      </ul>
+    {% else %}
+      <p>No forums available.</p>
+    {% endif %}
+  </div>
+</div>
 
 {% endblock %}

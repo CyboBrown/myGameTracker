@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Update Post{% endblock %}
+{% block content %}
+<h1>Update Post</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.content.errors }}
+    {{ form.content.label_tag }}<br>{{ form.content }}<br>
+    <button type="submit" class="btn btn-success">Update Post</button>
+    <button type="submit" name="action" value="delete_post" class="btn btn-danger">Delete Post</button>
+    <a href="{% url 'forum:forum_details' forum_id=post.forum.pk %}" class="btn btn-secondary">Cancel</a>
+</form>
+{% endblock %}
