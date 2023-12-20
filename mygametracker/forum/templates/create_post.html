@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Create Post{% endblock %}
+{% block content %}
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.content.errors }}
+    {{ form.content.label_tag }}<br>{{ form.content }}<br>
+    <input type="submit" value="Create Post" class="btn btn-success">
+    <a href="{% url 'forum:forum_details' forum_id=forum.pk %}" class="btn btn-danger">Cancel</a>
+</form>
+
+{% endblock %}

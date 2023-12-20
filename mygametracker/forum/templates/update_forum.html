@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}Update Forum{% endblock %}
+{% block content %}
+
+<h1>Update Forum</h1>
+
+<form method="post" action="{% url 'forum:update_forum' forum_id=forum.pk %}">
+    {% csrf_token %}
+    {{ form.title.errors }}
+    {{ form.title.label_tag }} {{ form.title }}<br><br>
+
+    {{ form.description.errors }}
+    {{ form.description.label_tag }}<br>{{ form.description }}<br>
+    <button type="submit" name="action" value="update" class="btn btn-success">Update Forum Details</button>
+    <button type="submit" name="action" value="delete" class="btn btn-danger">Delete Forum</button>
+    <a href="{% url 'forum:forum_details' forum_id=forum.pk %}" class="btn btn-secondary">Cancel</a>
+</form>
+
+{% endblock %}
