@@ -28,7 +28,7 @@ class User(models.Model):
 
 class UserFriend(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_friends')
-    friend = models.ForeignKey(User, on_delete=models.CASCADE)
+    friend = models.ForeignKey(User, on_delete=models.CASCADE, related_name='friend_of')
     friend_username = models.CharField(max_length=255)
     date_added = models.DateTimeField(auto_now_add=True)
 

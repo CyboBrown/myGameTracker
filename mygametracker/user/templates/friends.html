@@ -48,7 +48,7 @@
             </form>
 
             <!-- Add Friend Modal -->
-            <form method="post" action="{% url 'user:friends' %}">
+            <form method="post" action="{% url 'user:add_friend' %}">
                 {% csrf_token %}
                 <div class="modal fade" id="addFriend">
                     <div class="modal-dialog">

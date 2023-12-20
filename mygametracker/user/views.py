@@ -20,7 +20,7 @@ def dashboard(request):
 
 
 def profile(request):
-    current_username = request.session.get('curr_user', None)
+    current_username = request.session.get('curr_user')
 
     if current_username:
         try:
@@ -75,18 +75,36 @@ def delete_profile(request):
 
 
 def friends(request):
-    friends = UserFriend.objects.all()
+    user_object = User.objects.get(username=request.session['curr_user'])
+    current_user_id = user_object.user_id
+
+    friends = UserFriend.objects.filter(user_id=user_object.user_id)
 
     if request.method == 'POST':
         friend_username = request.POST.get('friend_username')
 
         try:
-            friend = UserFriend.objects.get(friend_username=friend_username)
+            friend = UserFriend.objects.get(friend_username=friend_username, user_id=current_user_id)
             friend.delete()
         except UserFriend.DoesNotExist:
             return redirect('user:friends')
 
     return render(request, 'friends.html', {'friends': friends})
+
+
+def add_friend(request):
+    if request.method == 'POST':
+        friend_username = request.POST.get('friend_username')
+        friend_object = User.objects.get(username=friend_username)
+        friend_user_id = friend_object.user_id
+
+        user_object = User.objects.get(username=request.session['curr_user'])
+        current_user_id = user_object.user_id
+
+        if not UserFriend.objects.filter(user_id=current_user_id, friend_id=friend_user_id).exists():
+            UserFriend.objects.create(user_id=current_user_id, friend_id=friend_user_id, friend_username=friend_username)
+
+    return redirect('user:friends')
 
 
 class UserSignup(View):
