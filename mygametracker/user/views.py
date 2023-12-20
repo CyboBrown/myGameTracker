@@ -1,3 +1,4 @@
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from .form import SignupForm, LoginForm, UserProfileUpdateForm
 from .models import User, UserFriend
@@ -95,14 +96,21 @@ def friends(request):
 def add_friend(request):
     if request.method == 'POST':
         friend_username = request.POST.get('friend_username')
-        friend_object = User.objects.get(username=friend_username)
-        friend_user_id = friend_object.user_id
 
-        user_object = User.objects.get(username=request.session['curr_user'])
-        current_user_id = user_object.user_id
+        try:
+            # Try to get the friend object
+            friend_object = User.objects.get(username=friend_username)
+            friend_user_id = friend_object.user_id
 
-        if not UserFriend.objects.filter(user_id=current_user_id, friend_id=friend_user_id).exists():
-            UserFriend.objects.create(user_id=current_user_id, friend_id=friend_user_id, friend_username=friend_username)
+            user_object = User.objects.get(username=request.session['curr_user'])
+            current_user_id = user_object.user_id
+
+            # Check if the friendship already exists
+            if not UserFriend.objects.filter(user_id=current_user_id, friend_id=friend_user_id).exists():
+                UserFriend.objects.create(user_id=current_user_id, friend_id=friend_user_id, friend_username=friend_username)
+
+        except ObjectDoesNotExist:
+            return redirect('user:friends')
 
     return redirect('user:friends')
 
