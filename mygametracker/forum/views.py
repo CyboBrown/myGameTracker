@@ -37,7 +37,7 @@ def index(request):
     elif sort_by == 'num_posts':
         forums = forums.annotate(num_posts=Count('post')).order_by('-num_posts', '-created_on')
 
-    return render(request, 'forum.html', {'forums': forums, 'search_query': query})
+    return render(request, 'forum.html', {'forums': forums, 'search_query': query, 'sort_by': sort_by})
 
 
 def create_forum(request):
@@ -83,7 +83,7 @@ def forum_details(request, forum_id):
         if current_user and current_user == forum.user:
             user_is_creator = True
 
-    return render(request, 'forum_details.html', {'forum': forum, 'posts': posts, 'user_is_creator': user_is_creator})
+    return render(request, 'forum_details.html', {'forum': forum, 'posts': posts, 'user_is_creator': user_is_creator, 'search_query': query, 'sort_by': sort_by})
 
 
 def update_forum(request, forum_id):
