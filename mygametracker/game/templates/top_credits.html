@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Top Credits{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+
+  <h1 class="mb-4">Top Users</h1>
+
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped table-dark">
+      <thead>
+        <tr>
+          <th scope="col">Rank</th>
+          <th scope="col">Name</th>
+          <th scope="col">Games Added</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for user in top_credits_list %}
+          <tr class="{% if forloop.counter == 1 %}table-warning{% elif forloop.counter == 2 %}table-secondary{% elif forloop.counter == 3 %}table-info{% endif %}">
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ user.username }}</td>
+            <td>{{ user.total_credits }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+{% endblock %}

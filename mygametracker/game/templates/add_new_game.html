@@ -21,6 +21,12 @@
       </div>
     {% endif %}
 
+    {% if info_message %}
+      <div class="alert alert-info" role="alert">
+        {{ info_message }}
+      </div>
+    {% endif %}
+
     <!-- Add your form here -->
     <form method="post" action="{% url 'game:add_new_game' %}">
       {% csrf_token %}
@@ -41,6 +47,11 @@
       <div class="mb-3">
         <label for="description" class="form-label">Description:</label>
         <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+      </div>
+      <!-- Image URL -->
+      <div class="mb-3">
+        <label for="image" class="form-label">Image URL(optional):</label>
+        <input type="text" class="form-control" id="image" name="image">
       </div>
 
       <!-- Release Date -->

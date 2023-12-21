@@ -9,7 +9,6 @@
   {% if request.session.curr_user != '' %}
 
     <h1 class="mb-4">Welcome to MyGameTracker, {{ request.session.curr_user }}!</h1>
-    <a href="{% url 'game:add_new_game' %}" class="btn btn-primary">Add New Game</a>
     <br>
     <br>
     <!-- Card -->
@@ -46,7 +45,7 @@
               <div class="col-md-6">
                 <div class="carousel-caption text-start">
                   <h5>{{ game.title }}</h5>
-                  <p>Rating: {{ game.rating }}</p>
+                  <p>Rating: {{ game.rating }}/10</p>
                 </div>
               </div>
               <div class="col-md-6">
@@ -78,7 +77,7 @@
               <div class="col-md-6">
                 <div class="carousel-caption text-start">
                   <h5>{{ game.title }}</h5>
-                  <p>Rating: {{ game.rating }}</p>
+                  <p>Rating: {{ game.rating }}/10</p>
                 </div>
               </div>
               <div class="col-md-6">

@@ -24,6 +24,11 @@ class AddNewGameForm(ModelForm):
         'class': 'form-control'
     }))
 
+    image = forms.CharField(widget=forms.TextInput({
+        'class': 'form-control',
+        'placeholder': 'Image (Optional)'
+    }), required=False)
+
     class Meta:
         model = Game
-        fields = ['title', 'genre', 'description', 'release_date']
+        fields = ['title', 'genre', 'description', 'release_date', 'image']

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Games List{% endblock %}
+{% block content %}
+
+<div class="container mt-4">
+
+  <h1 class="mb-4">Games</h1>
+
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    {% for game in games_list %}
+      <div class="col">
+        <div class="card h-100 bg-secondary text-light">
+          <img src="{{ game.image }}" class="card-img-top" alt="{{ game.title }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ game.title }}</h5>
+            <p class="card-text">{{ game.description }}</p>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Genres:</strong> {{ game.genres }}</li>
+            <li class="list-group-item"><strong>Rating:</strong> {{ game.rating }}/10</li>
+            <li class="list-group-item"><strong>Release Date:</strong> {{ game.release_date }}</li>
+          </ul>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+</div>
+
+{% endblock %}
