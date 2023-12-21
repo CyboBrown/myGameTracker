@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+{% block title %}Forum Details{% endblock %}
+{% block content %}
+
+<div class="row">
+    <div class="col-md-8">
+        <h1>{{ forum.title }}</h1>
+
+        <p class="small">Created by {{ forum.user.username }} on {{ forum.created_on|date:'D, F d, Y, h:i A' }}
+            <span class="text-secondary">
+                • Last updated on {{ forum.last_updated|date:'D, F d, Y, h:i A' }}
+            </span>
+        </p>
+        <p>Number of posts: {{ forum.post_count }}</p>
+        <p>Description: {{ forum.description }}</p>
+    </div>
+
+    <div class="col-md-4">
+        {% if request.session.curr_user != '' %}
+            {% if user_is_creator %}
+                <a href="{% url 'forum:update_forum' forum_id=forum.pk %}" class="btn btn-success">Update Forum</a>
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-9">
+        <div class="d-flex justify-content-between">
+            <div>
+                <h2>Posts</h2>
+            </div>
+
+            <div class="d-flex align-items-center">
+                <form method="get" action="{% url 'forum:forum_details' forum_id=forum.pk%}" class="me-2">
+                    <select id="sort-by" name="sort_by" class="form-select" onchange="this.form.submit()">
+                        <option value="" selected disabled>Sort by</option>
+                        <option value="date_created" {% if sort_by == 'date_created' %}selected{% endif %}>Latest</option>
+                        <option value="oldest_date_created" {% if sort_by == 'oldest_date_created' %}selected{% endif %}>Oldest</option>
+                    </select>
+                    <input type="hidden" name="q" value="{% if search_query %}{{ search_query }}{% endif %}">
+                </form>
+
+                <form method="get" action="{% url 'forum:forum_details' forum_id=forum.pk%}" class="me-2">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search post or author" name="q" value="{% if search_query %}{{ search_query }}{% endif %}">
+                        <input type="hidden" name="sort_by" value="{% if sort_by %}{{ sort_by }}{% endif %}">
+                        <button class="btn btn-secondary" type="submit">Search</button>
+                    </div>
+                </form>
+
+                {% if request.session.curr_user != '' %}
+                    <a href="{% url 'forum:create_post' forum_id=forum.pk %}" class="btn btn-success">Create Post</a>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if posts %}
+            <ul class="list-group forum-list">
+                {% for post in posts %}
+                    <li class="list-group-item {% if forloop.last %}border-bottom-0{% endif %} border-top-0 border-start-0 border-end-0 bg-dark text-light">
+                        <div class="d-flex align-items-center">
+                            <div class="border-end small" style="width: 150px; padding-right: 15px">
+                                <p><strong>Posted by {{ post.user.username }}</strong><br>
+                                    <span class="small" data-toggle="tooltip" title="{{ post.posted_on|date:'D, F d, Y, h:i A' }}">{{ post.posted_on|simplify_timesince }} ago</span>
+                                    {% if post.posted_on != post.last_updated %}
+                                        • <span class="small" data-toggle="tooltip" title="{{ post.last_updated|date:'D, F d, Y, h:i A' }}">Edited</span>
+                                    {% endif %}
+                                </p>
+                                {% if request.session.curr_user == post.user.username %}
+                                    <p class="small"><a href="{% url 'forum:update_post' post_id=post.pk %}">Update Post</a></p>
+                                {% endif %}
+                            </div>
+                            <div class="align-items-center" style="padding-left: 1rem">
+                                <p class="mb-0">{{ post.content }}</p>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No posts available.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}
