@@ -1,0 +1,103 @@
+{% load static %}
+
+{% if current_user != '' %}
+<!-- Redirect to login page during invalid session -->
+{% endif %}
+<!DOCTYPE html>
+<html lang=""en>
+  <head>
+    <meta charset="UTF-8">
+    <title> {{ game.title }} | MyGameTracker </title>
+    <link rel="icon" href="../media/favicon.png">
+    <link rel="stylesheet" href="{% static 'css/style-main.css' %}">
+    <script src="{% static 'scripts/script.js' %}"></script>
+  </head>
+  <body>
+    <nav class="nav-container">
+      <div class="navbar-div-left">
+        <a href="../index.html" class="web-logo"><div class="nav-element"><img src="{% static 'media/logo.png' %}" height="40" alt="logo"></div></a>
+        <a href="../../browse/" class="nav-interactable"><div class="nav-element"> GAMES </div></a>
+        <a href="register-login.html" class="nav-interactable"><div class="nav-element"> FORUMS </div></a>
+      </div>
+      <div class="navbar-div-right">
+        <a href="../../list/" class="nav-interactable"><div class="nav-element"> MY LIST </div></a>
+        <a href="register-login.html" class="nav-interactable"><div class="nav-element"> MY COLLECTIONS </div></a>
+        <a href="register-login.html"><div class="nav-element"> <img src="{% static 'media/default_user.png' %}" width="48" height="48"> {{ request.session.curr_user }} </span></div></a>
+      </div>
+    </nav>
+    <div class="game-bg" style="background-image: url({% static game.img_local_link %}); background-size: cover; background-position: center; background-repeat: no-repeat;">
+      <div class="game-info-container" style="backdrop-filter: blur(5px) brightness(50%);">
+        <div class="actions">
+          <div class="game-image"><img src="{% static game.img_local_link %}" width="300" height="400"></div>
+          <div class="button-container-2">
+            {% if not already_added %}
+            <button class="add-to-list" type="button" onclick="addRecord({{ game.game_id }})"> Add to List </button>
+            {% else %}
+            <button class="edit-from-list" type="button" onclick="showPrompt(this)" game-id="{{ entry_id.id }}"> Edit Submission </button>
+            {% endif %}
+          </div>
+        </div>
+
+        <div class="information">
+          <div class="game-info-title"> {{ game.title }} </div>
+          <div class="game-info"> {{ game.description | linebreaks }} </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="prompt" class="prompt-container">
+      <h1 style="margin-top: 5px; text-align: center;"> Edit Submission </h1>
+      <form>
+        <input type="hidden" name="game_id" value="">
+        <div class="submission-basic">
+          <div class="status">
+            <div class="dropdown-label"><h3> Status: </h3></div>
+            <div class="dropdown-styling">
+              <div class="dropdown">
+                <input class="generic-form-dropdown" type="text" placeholder="Status goes here..." onclick="toggleDropdown(this)" name="status" readonly>
+                <ul class="dropdown-options">
+                  <li onclick="selectOption(this)">Currently Playing</li>
+                  <li onclick="selectOption(this)">Completed</li>
+                  <li onclick="selectOption(this)">On Hold</li>
+                  <li onclick="selectOption(this)">Planning to Play</li>
+                  <li onclick="selectOption(this)">Dropped</li>
+                </ul>
+              </div>
+              <div class="dropdown-icon"></div>
+            </div>
+          </div>
+          <div class="rating">
+            <div class="dropdown-label"><h3> Rating: </h3></div>
+            <div class="dropdown-styling">
+              <div class="dropdown">
+                <input class="generic-form-dropdown" type="text" value="Undecided" onclick="toggleDropdown(this)" name="rating" readonly>
+                <ul class="dropdown-options">
+                  <li onclick="selectOption(this)">Undecided</li>
+                  <li onclick="selectOption(this)">(10) Masterpiece</li>
+                  <li onclick="selectOption(this)">(9) Excellent</li>
+                  <li onclick="selectOption(this)">(8) Very Good</li>
+                  <li onclick="selectOption(this)">(7) Good</li>
+                  <li onclick="selectOption(this)">(6) Fine</li>
+                  <li onclick="selectOption(this)">(5) Average</li>
+                  <li onclick="selectOption(this)">(4) Bad</li>
+                  <li onclick="selectOption(this)">(3) Very Bad</li>
+                  <li onclick="selectOption(this)">(2) Horrible</li>
+                  <li onclick="selectOption(this)">(1) Unplayable</li>
+                </ul>
+              </div>
+              <div class="dropdown-icon"></div>
+            </div>
+          </div>
+        </div>
+        <h3 style="margin: 2px 0px 3px 0px;"> Review: </h3>
+        <textarea class="generic-form-textarea-variant" id="review-area" placeholder="Maybe today's the day to leave a little review?" name="review"></textarea>
+
+        <div class="button-container">
+          <button class="generic-button" style="background-color: green;" type="button" onclick="editRecord()"> Submit </button>
+          <button class="generic-button" style="background-color: red;" type="button" onclick="deleteRecord()"> Delete </button>
+        </div>
+      </form>
+    </div>
+    <div id="overlay" class="overlay"></div>
+  </body>
+</html>

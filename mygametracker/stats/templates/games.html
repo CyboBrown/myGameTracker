@@ -1,0 +1,43 @@
+{% load static %}
+
+{% if current_user != '' %}
+<!-- Redirect to login page during invalid session -->
+{% endif %}
+<!DOCTYPE html>
+<html lang=""en>
+  <head>
+    <meta charset="UTF-8">
+    <title> Browse Games | MyGameTracker </title>
+    <link rel="icon" href="../media/favicon.png">
+    <link rel="stylesheet" href="{% static 'css/style-main.css' %}">
+    <script src="{% static 'scripts/script.js' %}"></script>
+  </head>
+  <body>
+    <nav class="nav-container">
+      <div class="navbar-div-left">
+        <a href="../index.html" class="web-logo"><div class="nav-element"><img src="{% static 'media/logo.png' %}" height="40" alt="logo"></div></a>
+        <a href="../../browse/" class="nav-interactable"><div class="nav-element"> GAMES </div></a>
+        <a href="register-login.html" class="nav-interactable"><div class="nav-element"> FORUMS </div></a>
+      </div>
+      <div class="navbar-div-right">
+        <a href="../../../list/" class="nav-interactable"><div class="nav-element"> MY LIST </div></a>
+        <a href="register-login.html" class="nav-interactable"><div class="nav-element"> MY COLLECTIONS </div></a>
+        <a href="register-login.html"><div class="nav-element"> <img src="{% static 'media/default_user.png' %}" width="48" height="48"> {{ request.session.curr_user }} </span></div></a>
+      </div>
+    </nav>
+    <div class="search-bar">
+        <h1 style="text-align: center; font-family: 'Signika'; font-size: 46px;"> Browse games in our database and start tracking now! </h2>
+        <input class="generic-form-textbox" type="search" placeholder="Search for games..." name="list_search">
+    </div>
+    <div class="game-grid-container">
+        {% for g in games %}
+        <a href="{% url 'stats:game_viewer' game_id=g.game_id %}">
+          <div class="game">
+            <div class="game-image"><img src="{% static g.img_local_link %}" width="200" height="300"></div>
+            <div class="game-title">{{ g.title }}</div>
+          </div>
+        </a>
+        {% endfor %}
+    </div>
+  </body>
+</html>

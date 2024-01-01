@@ -9,7 +9,7 @@ class Platform(models.Model):
     platform = models.CharField(max_length=64)
 
     def __str__(self):
-        return self
+        return ""
 
 
 class UserGamePlatform(models.Model):
@@ -23,14 +23,12 @@ class UserGamePlatform(models.Model):
 
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     game_id = models.ForeignKey(Game, on_delete=models.CASCADE)
-    platform_id = models.ForeignKey(Platform, on_delete=models.CASCADE)
-    rating_int = models.IntegerField(name="score")
+    #platform_id = models.ForeignKey(Platform, on_delete=models.CASCADE)
+    score = models.IntegerField(name="score")
     # progress_int = models.IntegerField(name="Progress")
     status = models.CharField(max_length=3, choices=STATUS_CHOICES)
     review = models.TextField()
 
     # String return to be decided, for now, just return object reference.
     def __str__(self):
-        return self
-
-
+        return f"{self.user_id} - {self.game_id} - {self.score} - {self.platform_id} - {self.status} - {self.review}"
