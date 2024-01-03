@@ -1,4 +1,5 @@
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import connection, IntegrityError
 from django.http import HttpResponse
 from .form import SignupForm, LoginForm, UserProfileUpdateForm
 from .models import User, UserFriend
@@ -61,18 +62,18 @@ def delete_profile(request):
 
         if current_username:
             try:
-                user = User.objects.get(username=current_username)
-                user.delete()
+                with connection.cursor() as cursor:
+                    cursor.callproc('DeleteUserProfile', [current_username])
 
                 request.session.clear()
 
                 return redirect('user:logout')
-            except User.DoesNotExist:
-                return HttpResponse("User does not exist")
+            except IntegrityError as e:
+                return HttpResponse("Error deleting user profile")
         else:
-            pass
+            return HttpResponse("Current user not found")
     else:
-        pass
+        return HttpResponse("Invalid request method")
 
 
 def friends(request):
@@ -84,11 +85,8 @@ def friends(request):
     if request.method == 'POST':
         friend_username = request.POST.get('friend_username')
 
-        try:
-            friend = UserFriend.objects.get(friend_username=friend_username, user_id=current_user_id)
-            friend.delete()
-        except UserFriend.DoesNotExist:
-            return redirect('user:friends')
+        with connection.cursor() as cursor:
+            cursor.callproc('DeleteUserFriend', [current_user_id, friend_username])
 
     return render(request, 'friends.html', {'friends': friends})
 
@@ -98,16 +96,15 @@ def add_friend(request):
         friend_username = request.POST.get('friend_username')
 
         try:
-            # Try to get the friend object
             friend_object = User.objects.get(username=friend_username)
             friend_user_id = friend_object.user_id
 
             user_object = User.objects.get(username=request.session['curr_user'])
             current_user_id = user_object.user_id
 
-            # Check if the friendship already exists
             if not UserFriend.objects.filter(user_id=current_user_id, friend_id=friend_user_id).exists():
-                UserFriend.objects.create(user_id=current_user_id, friend_id=friend_user_id, friend_username=friend_username)
+                with connection.cursor() as cursor:
+                    cursor.callproc('AddUserFriend', [current_user_id, friend_user_id, friend_username])
 
         except ObjectDoesNotExist:
             return redirect('user:friends')
@@ -125,16 +122,26 @@ class UserSignup(View):
     def post(self, request):
         user = SignupForm()
         error = False
+
         if request.method == 'POST':
             user = SignupForm(request.POST)
+
             if user.is_valid():
-                if len(User.objects.filter(username=request.POST.get('username'),
-                                           email=request.POST.get('email'))) == 0:
-                    user.save()
-                    return render(request, 'login.html', {'form': LoginForm()})
-                else:
-                    error = True
-                    return render(request, self.template, {'form': user, 'response': error})
+                username = request.POST.get('username')
+                email = request.POST.get('email')
+                password = request.POST.get('password')
+                gender = request.POST.get('gender')
+
+                if len(User.objects.filter(username=username, email=email, password=password, gender=gender)) == 0:
+                    try:
+                        with connection.cursor() as cursor:
+                            cursor.callproc('CreateUserProfile', [username, email, password, gender])
+                    except IntegrityError as e:
+                        error = True
+                        return render(request, self.template, {'form': user, 'response': error})
+
+                    return redirect('user:login')
+
         return render(request, self.template, {'form': user, 'response': error})
 
 
